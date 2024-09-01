@@ -1,0 +1,844 @@
+
+    <!DOCTYPE html>
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title data-template="config:app-title">Digital Syriac Corpus</title>
+        <meta name="DC.title " property="dc.title " content="">
+    <link type="text/html" href="https://syriaccorpus.org/276.html" rel="alternate">
+    <link type="text/xml" href="https://syriaccorpus.org/276/tei" rel="alternate">
+    <link type="application/atom+xml" href="https://syriaccorpus.org/276/atom" rel="alternate">
+        <link rel="shortcut icon" href="$nav-base/resources/images/favicon.ico">
+        <!-- Bootstrap 3 -->
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/css/sm-core-css.css">
+        <!-- Srophe styles -->
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/css/syr-icon-fonts.css">
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/css/style.css">
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/css/main.css">
+        <!--<link rel="stylesheet" type="text/css" href="$nav-base/resources/css/slider.css"/>-->
+        <!--<link rel="stylesheet" type="text/css" href="$nav-base/resources/css/lightslider.css"/>-->
+        <link rel="stylesheet" type="text/css" media="print" href="$nav-base/resources/css/print.css">
+        <!-- Leaflet 
+        <link rel="stylesheet" href="$nav-base/resources/leaflet/leaflet.css"/>
+        <link rel="stylesheet" href="$nav-base/resources/leaflet/leaflet.awesome-markers.css"/>
+        -->
+        <!-- Date Slider -->
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/dateSlider/css/slider.css">
+        <link rel="stylesheet" type="text/css" href="$nav-base/resources/dateSlider/css/slider-classic-min.css">
+        <!-- JQuery -->
+        <link href="$nav-base/resources/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+        <script defer data-domain="syriaccorpus.org" src="https://plausible.io/js/plausible.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/js/jquery.min.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/jquery-ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/js/jquery.smartmenus.min.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/js/clipboard.min.js"></script>
+        <!-- Date Slider -->
+        <script src="$nav-base/resources/dateSlider/js/jQDateRangeSlider-min.js"></script>
+        <!-- Bootstrap -->
+        <script type="text/javascript" src="$nav-base/resources/bootstrap/js/bootstrap.min.js"></script>
+        <!-- ReCaptcha -->
+        <script src="https://www.google.com/recaptcha/api.js" type="text/javascript" async defer></script>
+        <!-- keyboard widget css & script -->
+        <link href="$nav-base/resources/keyboard/css/keyboard.min.css" rel="stylesheet">
+        <link href="$nav-base/resources/keyboard/css/keyboard-previewkeyset.min.css" rel="stylesheet">
+        <link href="$nav-base/resources/keyboard/syr/syr.css" rel="stylesheet">
+        <script type="text/javascript" src="$nav-base/resources/keyboard/syr/jquery.keyboard.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/keyboard/js/jquery.keyboard.extension-mobile.min.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/keyboard/js/jquery.keyboard.extension-navigation.min.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/keyboard/syr/jquery.keyboard.extension-autocomplete.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/keyboard/syr/keyboardSupport.js"></script>
+        <script type="text/javascript" src="$nav-base/resources/keyboard/syr/syr.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('[data-toggle="tooltip"]').tooltip({ container: 'body' })
+
+                $('.keyboard').keyboard({
+                    openOn: null,
+                    stayOpen: false,
+                    alwaysOpen: false,
+                    autoAccept: true,
+                    usePreview: false,
+                    initialFocus: true,
+                    rtl : true,
+                    layout: 'syriac-phonetic',
+                    hidden: function(event, keyboard, el){
+                       //  keyboard.destroy();
+                     }
+                });
+
+                $('.keyboard-select').click(function () {
+                    var keyboardID = '#' + $(this).data("keyboard-id")
+                    var kb = $(keyboardID).getkeyboard();
+                    //var kb = $('#searchField').getkeyboard();
+                    // change layout based on link ID
+                    kb.options.layout = this.id
+                    // open keyboard if layout is different, or time from it last closing is > 200 ms
+                    if (kb.last.layout !== kb.options.layout || (new Date().getTime() - kb.last.eventTime) > 200) {
+                        kb.reveal();
+                    }
+                });
+                //Change fonts
+                $('.swap-font').on('click', function(){
+                    var selectedFont = $(this).data("font-id")
+                    $('.selectableFont').not('.syr').css('font-family', selectedFont);
+                    $("*:lang(syr)").css('font-family', selectedFont)
+                });
+
+            })
+        </script>
+    </head>
+    <body id="body">
+        <!--
+        Estrangela (use Estrangelo Edessa Font)
+East Syriac (what font do we current use here)
+West Syriac (what font do we current use here)
+        -->
+        <!--[if lt IE 7]>
+                <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+            <![endif]-->
+        <!-- Fixed navbar -->
+        <!--<div data-template="app:shared-content" data-template-path="/templates/draft-info.html"/>-->
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" data-template="app:fix-links">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/index.html" class="navbar-brand banner-container">
+                        <!--<img property="logo" class="img-responsive" alt="Syriac.org" src="$nav-base/resources/images/syriaca-logo.png"/> Draft-->
+                        <span class="banner-icon">
+                            <img src="$nav-base/resources/images/syriac-corpus.svg" alt="" width="50px">
+                        </span>
+                        <span class="banner-text">Digital Syriac Corpus</span>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse pull-right">
+                    <ul class="nav navbar-nav sm sm-vertical" id="main-menu">
+                        <li>
+                            <a href="/browse.html">Browse</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                About<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/about.html">About the Project</a>
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li>
+                                    <a href="/history.html">History of the Project</a>
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li>
+                                    <a href="/project-team.html">Project Team</a>
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li>
+                                    <a href="/submissions.html">Submissions to the Corpus</a>
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li>
+                                    <a href="/contact-us.html">Contact Us</a>
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li>
+                                    <a href="/documentation/index.html">Documentation</a>
+                                </li>
+                            </ul>
+                        </li>                      
+                    </ul>
+                    <form action="/search.html" class="navbar-form navbar-left navbar-input-group" role="search" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control keyboard" placeholder="search" name="q" id="keywordNav" title="Search by keyword">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit" data-toggle="tooltip" title="Search">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right keboard-btn">
+                        <li>
+                            <div class="btn-nav">
+                                <a href="#" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Select Font">
+                                <b class="caret"></b>
+                            </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="/search.html">Advanced Search</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="btn-nav navbar-btn">
+                                <span data-template="app:keyboard-select-menu" data-template-input-id="keywordNav"><span class="keyboard-menu"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Select Keyboard">
+                 <span class="syriaca-icon syriaca-keyboard">  </span><span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" class="keyboard-select" id="syriac-phonetic" data-keyboard-id="keywordNav">Syriac Phonetic</a></li>
+                                    <li><a href="#" class="keyboard-select" id="syriac-standard" data-keyboard-id="keywordNav">Syriac Standard</a></li>
+                                    <li><a href="#" class="keyboard-select" id="qwerty" data-keyboard-id="keywordNav">English QWERTY</a></li>
+                                </ul></span></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="btn-nav">
+                                <a href="#" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Select Font">
+                                    Font <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" id="swap-font">
+                                    <li>
+                                        <a href="#" class="swap-font" id="DefaultSelect" data-font-id="EstrangeloEdessa">Default</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="swap-font" id="EstrangeloEdessaSelect" data-font-id="EstrangeloEdessa">Estrangelo Edessa</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="swap-font" id="EastSyriacAdiabeneSelect" data-font-id="EastSyriacAdiabene">East Syriac Adiabene</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="swap-font" id="SertoBatnanSelect" data-font-id="SertoBatnan">Serto Batnan</a>
+                                    </li>
+                                    <li>
+                                        <a href="/documentation/wiki.html?wiki-page=/How-to-view-Syriac-script&amp;wiki-uri=https://github.com/srophe/srophe-app-data/wiki">Help <span class="glyphicon glyphicon-question-sign"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+        </div>
+        <div id="main">
+            <div id="content">
+    <!--<xi:include href="banner.html"/>-->
+    <div class="grey-dark">
+        <div class="container interior-content white">
+            <div class="title">
+                        <h1>Ephrem the Syrian: <span class="tei-title title-analytic" lang="en">Nisibis 19</span></h1>
+                    </div>
+            <div data-template="app:other-data-formats" data-template-formats="corrections,copy,print,tei,text" class="data-formats noprint">
+                        <div class="container" style="width:100%;clear:both;margin-bottom:1em; text-align:right;"><a class="btn btn-default btn-xs" data-toggle="modal" data-target="#feedback"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Corrections?</a> <a class="btn btn-default btn-xs" id="copyBtn" data-toggle="tooltip" title="To preserve right-to-left text, paste with options 'unformatted text' or 'keep text only.'" data-clipboard-action="copy"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy</a> <script>
+                                var fullText;
+                                $(document).ready(function() {
+                                    $.get('/276.txt', $(this).serialize(), function(data) {
+                                        fullText = data;
+                                       }).fail( function(jqXHR, textStatus, errorThrown) {
+                                         console.log(textStatus);
+                                    });
+                                    new Clipboard('#copyBtn', {
+                                    text: function(trigger) {
+                                      return fullText
+                                    }
+                                     });
+                                });                           
+                            </script><a href="javascript:window.print();" type="button" class="btn btn-default btn-xs" id="printBtn" data-toggle="tooltip" title="Click to send this page to the printer."><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a> <a href="/276.tei" class="btn btn-default btn-xs" id="teiBtn" data-toggle="tooltip" title="Click to view the TEI XML data for this record."><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> TEI
+                        </a> <a href="/276.txt" class="btn btn-default btn-xs" id="txtBtn" data-toggle="tooltip" title="Click to view the plain text version of this data."><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Text
+                            </a> <br></div>
+                    </div>
+            
+            <div class="row">
+                <div class="col-sm-2 col-md-2 noprint">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><a href="#" data-toggle="collapse" data-target="#toggleText">Show  </a><span class="glyphicon glyphicon-question-sign text-info moreInfo" aria-hidden="true" data-toggle="tooltip" title="Toggle the text display to show line numbers, section numbers and other structural divisions"></span><!--<a href="#" data-toggle="collapse" data-target="#showToc"><span id="tocIcon" class="glyphicon glyphicon-collapse-up"/></a>--></div>
+                                <div class="panel-body collapse in" id="toggleText">
+                                    <div class="toggle-buttons"><span class="toggle-label">section : </span><input class="toggleDisplay" type="checkbox" id="togglesection" data-element="tei-section" checked><label for="togglesection">section</label></div>
+                                    <div class="toggle-buttons"><span class="toggle-label"> line : </span><input class="toggleDisplay" type="checkbox" id="togglel" data-element="tei-l" checked><label for="togglel">line</label></div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><a href="#" data-toggle="collapse" data-target="#showToc">Table of Contents  </a><!--<a href="#" data-toggle="collapse" data-target="#showToc"><span id="tocIcon" class="glyphicon glyphicon-collapse-up"/></a>--></div>
+                                <div class="panel-body collapse in" id="showToc"><a href="#Head-id.1" class="toc-item">1</a>         <a href="#Head-id.2" class="toc-item">2</a>         <a href="#Head-id.3" class="toc-item">3</a>         <a href="#Head-id.4" class="toc-item">4</a>         <a href="#Head-id.5" class="toc-item">5</a>         <a href="#Head-id.6" class="toc-item">6</a>         <a href="#Head-id.7" class="toc-item">7</a>         <a href="#Head-id.8" class="toc-item">8</a>         <a href="#Head-id.9" class="toc-item">9</a>         <a href="#Head-id.10" class="toc-item">10</a>         <a href="#Head-id.11" class="toc-item">11</a>         <a href="#Head-id.12" class="toc-item">12</a>         <a href="#Head-id.13" class="toc-item">13</a>         <a href="#Head-id.14" class="toc-item">14</a>         <a href="#Head-id.15" class="toc-item">15</a>         <a href="#Head-id.16" class="toc-item">16</a>        </div>
+                            </div>
+                        </div>
+                <div class="col-sm-6 col-md-6 col-lg-7 mssBody">
+                            <div class="section tei-text">
+        <bdi>
+                                    <div class="body">
+                                        <div class="section" style="display:block;">
+            <div class="tei-div  tei-title" id="id.19" xml:lang="en" lang="en">
+                                                <span class="text-number badge">19</span>
+                <span class="tei-ab   " id="id.19." lang="en">Nisibis XIX</span>
+            </div>
+            <div class="tei-div  tei-body" id="id." lang="syr">
+                <div class="tei-div  tei-superscript" id="id.." lang="syr">
+                    <span class="tei-l   display" id="id..." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢܶܗ.html" class="sedra">ܡܶܢܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܪ.html" class="sedra">ܒܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܳܠܶܗ.html" class="sedra">ܩܳܠܶܗ</a>
+                                                    </span>
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..1" lang="syr">
+                                                    <span id="id..1"></span>
+                    <span class="tei-div  tei-section tei-head">1</span>
+                    <span class="tei-l   display" id="id..1." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܫܠܶܡ.html" class="sedra">ܫܠܶܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܫܡܶܗ.html" class="sedra">ܠܰܫܡܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܒܪܳܗܳܡ.html" class="sedra">ܐܰܒܪܳܗܳܡ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܰܗܘܰܝܬ.html" class="sedra">ܕܰܗܘܰܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܒܳܐ.html" class="sedra">ܐܰܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܣ̈ܰܓܺܝܐܶܐ.html" class="sedra">ܠܣ̈ܰܓܺܝܐܶܐ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..1." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܠܳܐ.html" class="sedra">ܕܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܶܝܢ.html" class="sedra">ܕܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܺܝܬ.html" class="sedra">ܐܺܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܪ̱ܬ.html" class="sedra">ܒܰܪ̱ܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܙܰܘܓܳܐ.html" class="sedra">ܙܰܘܓܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܰܕܡܽܘܬ.html" class="sedra">ܒܰܕܡܽܘܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܰܪܳܐ.html" class="sedra">ܣܰܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܐܒܪܳܗܳܡ.html" class="sedra">ܠܰܐܒܪܳܗܳܡ</a> </span>
+                    <span class="tei-l   display" id="id..1." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܗܳܐ.html" class="sedra">ܗܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܪܥܺܝܬܳܟ.html" class="sedra">ܡܰܪܥܺܝܬܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܪ̱ܬ.html" class="sedra">ܒܰܪ̱ܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܙܰܘܓܳܟ.html" class="sedra">ܙܰܘܓܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܒܢܶܝ̈ܗ̇.html" class="sedra">ܠܰܒܢܶܝ̈ܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܫܪܳܪܳܟ.html" class="sedra">ܒܰܫܪܳܪܳܟ</a> </span>
+                    <span class="tei-l   display" id="id..1." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܝܰܠܕ̈ܶܐ.html" class="sedra">ܝܰܠܕ̈ܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܪܽܘܚܳܐ.html" class="sedra">ܕܪܽܘܚܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܽܘܢ.html" class="sedra">ܢܶܗܘܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܒܢܰܝ̈ܳܐ.html" class="sedra">ܘܰܒܢܰܝ̈ܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܢܰܝ̈.html" class="sedra">ܒܢܰܝ̈</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܽܘܠܟܳܢܳܐ.html" class="sedra">ܡܽܘܠܟܳܢܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..1." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܢܶܗܘܽܘܢ.html" class="sedra">ܕܢܶܗܘܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܥܶܕܳܢ.html" class="sedra">ܒܥܶܕܳܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܳܪ̈ܽܘܬܶܐ.html" class="sedra">ܝܳܪ̈ܽܘܬܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܨܳܪܳܟ.html" class="sedra">ܕܨܳܪܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܐܒܪܳܗܳܡ.html" class="sedra">ܒܰܐܒܪܳܗܳܡ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..2" lang="syr">
+                                                    <span id="id..2"></span>
+                    <span class="tei-div  tei-section tei-head">2</span>
+                    <span class="tei-l   display" id="id..2." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܦܺܐܪܳܐ.html" class="sedra">ܦܺܐܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܰܐܝܳܐ.html" class="sedra">ܦܰܐܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܢܰܟܦܽܘܬܳܐ.html" class="sedra">ܕܢܰܟܦܽܘܬܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܟܳܗܢܽܘܬܳܐ.html" class="sedra">ܕܟܳܗܢܽܘܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܨܼܛܰܒܝܰܬ݀.html" class="sedra">ܐܶܨܼܛܰܒܝܰܬ݀</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..2." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܙܥܽܘܪ.html" class="sedra">ܙܥܽܘܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܚ̈ܰܘܗ̱ܝ.html" class="sedra">ܐܰܚ̈ܰܘܗ̱ܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܝܟ.html" class="sedra">ܐܰܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܪ.html" class="sedra">ܒܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܺܝܫܰܝ.html" class="sedra">ܐܺܝܫܰܝ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܩܰܪܢܳܐ.html" class="sedra">ܩܰܪܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܶܬܚܼܰܬ.html" class="sedra">ܪܶܬܚܼܰܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܡܫܰܚܬܳܟ.html" class="sedra">ܘܰܡܫܰܚܬܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..2." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܺܝܕܳܐ.html" class="sedra">ܐܺܝܕܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܚܦܰܬ.html" class="sedra">ܪܰܚܦܰܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܓܒܳܬܳܟ.html" class="sedra">ܘܰܓܒܳܬܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܥܺܕ̱ܬܳܐ.html" class="sedra">ܥܺܕ̱ܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܶܘܚܼܰܬ.html" class="sedra">ܣܶܘܚܼܰܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܪܚܼܶܡܬܳܟ.html" class="sedra">ܘܰܪܚܼܶܡܬܳܟ</a> </span>
+                    <span class="tei-l   display" id="id..2." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܡܰܕܒܚܳܐ.html" class="sedra">ܡܰܕܒܚܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܟܝܳܐ.html" class="sedra">ܕܰܟܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܬܶܫܡܶܫܬܳܟ.html" class="sedra">ܠܬܶܫܡܶܫܬܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܟܽܘܪܣܝܳܐ.html" class="sedra">ܟܽܘܪܣܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܺܐܝܩܳܪܳܟ.html" class="sedra">ܠܺܐܝܩܳܪܳܟ</a> </span>
+                    <span class="tei-l   display" id="id..2." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܟܽܠܗܶܝܢ.html" class="sedra">ܘܟܽܠܗܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܟܚܰܕ.html" class="sedra">ܐܰܟܚܰܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܟܠܺܝܠܳܟ.html" class="sedra">ܠܰܟܠܺܝܠܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܣܓܺܝ.html" class="sedra">ܕܰܐܣܓܺܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܽܘܠܳܠܳܟ.html" class="sedra">ܟܽܘܠܳܠܳܟ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..3" lang="syr">
+                                                    <span id="id..3"></span>
+                    <span class="tei-div  tei-section tei-head">3</span>
+                    <span class="tei-l   display" id="id..3." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܗܳܐ.html" class="sedra">ܗܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܪܥܺܝܬܳܟ.html" class="sedra">ܡܰܪܥܺܝܬܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܛܽܘܒܳܢܳܐ.html" class="sedra">ܛܽܘܒܳܢܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܩܽܘܡ.html" class="sedra">ܩܽܘܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܣܥܽܘܪܶܝܗ̇.html" class="sedra">ܘܰܣܥܽܘܪܶܝܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܰܫܺܝܪܳܐ.html" class="sedra">ܟܰܫܺܝܪܳܐ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..3." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܓܙܳܪ̈ܶܐ.html" class="sedra">ܓܙܳܪ̈ܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܰܥܩܽܘܒ.html" class="sedra">ܝܰܥܩܽܘܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܛܰܟܶܣ.html" class="sedra">ܛܰܟܶܣ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܛܰܟܶܣ.html" class="sedra">ܛܰܟܶܣ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܶܪ̈ܒܶܐ.html" class="sedra">ܥܶܪ̈ܒܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡ̈ܰܠܳܠܶܐ.html" class="sedra">ܡ̈ܰܠܳܠܶܐ</a> </span>
+                    <span class="tei-l   display" id="id..3." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܙܰܗܳܐ.html" class="sedra">ܘܙܰܗܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒ̈ܬܽܘܠܶܐ.html" class="sedra">ܒ̈ܬܽܘܠܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܟܝܳܐܺܝܬ.html" class="sedra">ܕܰܟܝܳܐܺܝܬ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܒܬܽܘ̈ܠܳܬܳܐ.html" class="sedra">ܘܰܒܬܽܘ̈ܠܳܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܟܦܳܐܺܝܬ.html" class="sedra">ܢܰܟܦܳܐܺܝܬ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..3." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܰܩܺܝܡ.html" class="sedra">ܐܰܩܺܝܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܳܗ̈ܢܶܐ.html" class="sedra">ܟܳܗ̈ܢܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܙܰܗܝܳܐܺܝܬ.html" class="sedra">ܙܰܗܝܳܐܺܝܬ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܠܪ̈ܺܝܫܳܢܶܐ.html" class="sedra">ܠܪ̈ܺܝܫܳܢܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܟܺܝܟܳܐܺܝܬ.html" class="sedra">ܡܰܟܺܝܟܳܐܺܝܬ</a> </span>
+                    <span class="tei-l   display" id="id..3." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܰܠܩܽܘܛܢܳܐ.html" class="sedra">ܘܰܠܩܽܘܛܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܙܰܕܺܝܩܳܐܺܝܬ.html" class="sedra">ܙܰܕܺܝܩܳܐܺܝܬ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܡܠܳܟ.html" class="sedra">ܕܰܡܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܽܘܟܳܠܳܐ.html" class="sedra">ܣܽܘܟܳܠܳܐ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..4" lang="syr">
+                                                    <span id="id..4"></span>
+                    <span class="tei-div  tei-section tei-head">4</span>
+                    <span class="tei-l   display" id="id..4." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܢܶܩܝܳܐ.html" class="sedra">ܢܶܩܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܚܠܺܝܡܳܐ.html" class="sedra">ܕܰܚܠܺܝܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܛܰܪ.html" class="sedra">ܢܰܛܰܪ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܣܥܽܘܪ.html" class="sedra">ܘܰܣܥܽܘܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܐܝܕܳܐ.html" class="sedra">ܠܰܐܝܕܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܟܪܺܝܗܳܐ.html" class="sedra">ܕܰܟܪܺܝܗܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..4." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܰܥܨܽܘܒ.html" class="sedra">ܘܰܥܨܽܘܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܐܝܕܳܐ.html" class="sedra">ܠܰܐܝܕܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܬܒܺܝܪܳܐ.html" class="sedra">ܕܰܬܒܺܝܪܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܦܩܽܘܕ.html" class="sedra">ܘܰܦܩܽܘܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܐܝܕܳܐ.html" class="sedra">ܠܰܐܝܕܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܒܺܝܕܳܐ.html" class="sedra">ܕܰܐܒܺܝܕܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..4." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܪܥܺܝܳܗ̇.html" class="sedra">ܪܥܺܝܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܡܰܪ̈ܓܶܐ.html" class="sedra">ܒܡܰܪ̈ܓܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܟܬܳܒ̈ܶܐ.html" class="sedra">ܕܰܟܬܳܒ̈ܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܐܫܩܳܗ̇.html" class="sedra">ܘܰܐܫܩܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܒܥܶܐ.html" class="sedra">ܢܶܒܥܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܝܽܘܠܦܳܢܳܐ.html" class="sedra">ܕܝܽܘܠܦܳܢܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..4." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܫܪܳܪܳܐ.html" class="sedra">ܫܪܳܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܫܽܘܪܳܐ.html" class="sedra">ܫܽܘܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܨܠܺܝܒܳܐ.html" class="sedra">ܨܠܺܝܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܽܘܛܪܳܐ.html" class="sedra">ܚܽܘܛܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..4." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܩܽܘܫܬܳܐ.html" class="sedra">ܘܩܽܘܫܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܫܠܳܡܳܐ.html" class="sedra">ܫܠܳܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܣܓܺܝ.html" class="sedra">ܕܰܐܣܓܺܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܨ̈ܚܳܢܰܝܟ.html" class="sedra">ܢܶܨ̈ܚܳܢܰܝܟ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..5" lang="syr">
+                                                    <span id="id..5"></span>
+                    <span class="tei-div  tei-section tei-head">5</span>
+                    <span class="tei-l   display" id="id..5." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܡܳܟ.html" class="sedra">ܥܰܡܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܓܙܳܪܳܟ.html" class="sedra">ܒܰܓܙܳܪܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܚܰܝܠܳܐ.html" class="sedra">ܚܰܝܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܗܼܘܳܐ.html" class="sedra">ܕܰܗܼܘܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܡ.html" class="sedra">ܥܰܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܘܺܝܕ.html" class="sedra">ܕܰܘܺܝܕ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..5." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܶܐܢ.html" class="sedra">ܕܶܐܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܰܘ.html" class="sedra">ܗܰܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܶܐܡܪܳܐ.html" class="sedra">ܠܶܐܡܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܳܒܽܘܪܳܐ.html" class="sedra">ܥܳܒܽܘܪܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢ.html" class="sedra">ܡܶܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܽܘܡܳܐ.html" class="sedra">ܦܽܘܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܪܝܳܐ.html" class="sedra">ܕܰܐܪܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܰܛܦܶܗ.html" class="sedra">ܚܰܛܦܶܗ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..5." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܟܡܳܐ.html" class="sedra">ܟܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܳܠܶܐ.html" class="sedra">ܘܳܠܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܨܺܝܚܳܐ.html" class="sedra">ܢܰܨܺܝܚܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܬܶܛܰܢ.html" class="sedra">ܕܬܶܛܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܰܥܕܶܐ.html" class="sedra">ܬܰܥܕܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢ.html" class="sedra">ܡܶܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܺܝܫܼܳܐ.html" class="sedra">ܒܺܝܫܼܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..5." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܢܰܦܫܳܐ.html" class="sedra">ܢܰܦܫܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܡܶܢ.html" class="sedra">ܕܡܶܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܽܠ.html" class="sedra">ܟܽܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܰܬܺܝܪܳܐ.html" class="sedra">ܝܰܬܺܝܪܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܰܒܡܶܕܶܡ.html" class="sedra">ܕܰܒܡܶܕܶܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܐ.html" class="sedra">ܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܙܕܰܒܢܳܐ.html" class="sedra">ܡܶܙܕܰܒܢܳܐ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..5." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܶܠܳܐ.html" class="sedra">ܐܶܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܕܡܶܗ.html" class="sedra">ܒܰܕܡܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܡܫܺܝܚܳܐ.html" class="sedra">ܕܰܡܫܺܝܚܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܶܐܙܕܰܒܰܢ.html" class="sedra">ܕܶܐܙܕܰܒܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܙܒܰܢ.html" class="sedra">ܘܰܙܒܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܽܠ.html" class="sedra">ܟܽܠ</a> </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..6" lang="syr">
+                                                    <span id="id..6"></span>
+                    <span class="tei-div  tei-section tei-head">6</span>
+                    <span class="tei-l   display" id="id..6." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܡܽܘܫܶܐ.html" class="sedra">ܠܡܽܘܫܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܶܫܽܘܥ.html" class="sedra">ܝܶܫܽܘܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܫܰܡܶܫ.html" class="sedra">ܫܰܡܶܫ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܚܠܳܦ.html" class="sedra">ܘܰܚܠܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܓܪܳܐ.html" class="sedra">ܐܰܓܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܬܶܫܡܶܫܬܶܗ.html" class="sedra">ܕܬܶܫܡܶܫܬܶܗ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..6." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܝܰܡܺܝܢܳܐ.html" class="sedra">ܝܰܡܺܝܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܰܒܶܠ.html" class="sedra">ܩܰܒܶܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢܶܗ.html" class="sedra">ܡܶܢܶܗ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܰܠܣܳܒܳܐ.html" class="sedra">ܕܰܠܣܳܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܕܺܝܪܳܐ.html" class="sedra">ܗܕܺܝܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܫܰܡܼܫܰܬ.html" class="sedra">ܫܰܡܼܫܰܬ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..6." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܝܰܡܺܝܢܳܐ.html" class="sedra">ܝܰܡܺܝܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܰܗ̱ܒ.html" class="sedra">ܝܰܗ̱ܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܽܘ.html" class="sedra">ܗܽܘ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܡܽܘܫܶܐ.html" class="sedra">ܡܽܘܫܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܝܶܫܽܘܥ.html" class="sedra">ܠܝܶܫܽܘܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܫܠܼܶܡ.html" class="sedra">ܐܰܫܠܼܶܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..6." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܓܙܳܪܳܐ.html" class="sedra">ܓܙܳܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܦܶܠܓܶܗ.html" class="sedra">ܕܦܶܠܓܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܺܐܒ̈ܶܐ.html" class="sedra">ܕܺܐܒ̈ܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܠܳܟ.html" class="sedra">ܘܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܬܓܰܥܠܼܰܬ.html" class="sedra">ܐܶܬܓܰܥܠܼܰܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܪܥܺܝܬܳܐ.html" class="sedra">ܡܰܪܥܺܝܬܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..6." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܪܽܘܒܥܳܗ̇.html" class="sedra">ܕܪܽܘܒܥܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܬܽܘܠܬܳܗ̇.html" class="sedra">ܘܬܽܘܠܬܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܰܕܺܝܫܳܐ.html" class="sedra">ܩܰܕܺܝܫܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܝ.html" class="sedra">ܗ̱ܝ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܨܰܒܼܶܬ.html" class="sedra">ܕܨܰܒܼܶܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܪܥܺܝܬܳܟ.html" class="sedra">ܡܰܪܥܺܝܬܳܟ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..7" lang="syr">
+                                                    <span id="id..7"></span>
+                    <span class="tei-div  tei-section tei-head">7</span>
+                    <span class="tei-l   display" id="id..7." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܚܽܘܒܶܗ.html" class="sedra">ܚܽܘܒܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܡܽܘܫܶܐ.html" class="sedra">ܕܡܽܘܫܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܫܼܪܶܐ.html" class="sedra">ܢܰܫܼܪܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܚܽܘܒܶܗ.html" class="sedra">ܕܚܽܘܒܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܽܘܒܳܐ.html" class="sedra">ܚܽܘܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܦܽܘܪܫܳܢܳܐ.html" class="sedra">ܕܦܽܘܪܫܳܢܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..7." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܛܼܢܳܢܶܗ.html" class="sedra">ܛܼܢܳܢܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܛܢܳܢܳܐ.html" class="sedra">ܛܢܳܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܒܽܘܝܳܢܳܐ.html" class="sedra">ܕܒܽܘܝܳܢܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܩܽܘܪܰܚ.html" class="sedra">ܩܽܘܪܰܚ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܕܳܬܰܢ.html" class="sedra">ܘܕܳܬܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܣܕܰܩܘ̱.html" class="sedra">ܕܰܣܕܰܩܘ̱</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܰܘ.html" class="sedra">ܗ̱ܘܰܘ</a> </span>
+                    <span class="tei-l   display" id="id..7." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܣܼܕܰܩ.html" class="sedra">ܣܼܕܰܩ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܪܥܳܐ.html" class="sedra">ܐܰܪܥܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܬܚܽܘܬܰܝܗܽܘܢ.html" class="sedra">ܕܰܬܚܽܘܬܰܝܗܽܘܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܣܼܶܕܩܳܐ.html" class="sedra">ܒܣܼܶܕܩܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܶܕܩܳܐ.html" class="sedra">ܣܶܕܩܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܛܶܠ.html" class="sedra">ܒܰܛܶܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..7." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܒܶܐܠܕܳܕ.html" class="sedra">ܒܶܐܠܕܳܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܡܺܝܕܳܕ.html" class="sedra">ܘܡܺܝܕܳܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܘܕܰܥ.html" class="sedra">ܐܰܘܕܰܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܨܶܒܝܳܢܶܗ.html" class="sedra">ܕܨܶܒܝܳܢܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܽܠܶܗ.html" class="sedra">ܟܽܠܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܳܢܰܘ.html" class="sedra">ܗܳܢܰܘ</a> </span>
+                    <span class="tei-l   display" id="id..7." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܟܽܠܶܗ.html" class="sedra">ܕܟܽܠܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܡܳܐ.html" class="sedra">ܥܰܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܬܢܰܒܶܐ.html" class="sedra">ܢܶܬܢܰܒܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܶܐܬܪܰܥܺܝ.html" class="sedra">ܕܶܐܬܪܰܥܺܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܨܶܒܝܳܢܶܗ.html" class="sedra">ܒܨܶܒܝܳܢܶܗ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..8" lang="syr">
+                                                    <span id="id..8"></span>
+                    <span class="tei-div  tei-section tei-head">8</span>
+                    <span class="tei-l   display" id="id..8." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܡܶܣܟܺܢܽܘܬܶܗ.html" class="sedra">ܠܡܶܣܟܺܢܽܘܬܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܶܐܠܺܝܳܐ.html" class="sedra">ܕܶܐܠܺܝܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܪܚܶܡ.html" class="sedra">ܪܚܶܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܠܺܝܫܳܥ.html" class="sedra">ܐܶܠܺܝܫܳܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢ.html" class="sedra">ܡܶܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܽܘܬܪܳܐ.html" class="sedra">ܥܽܘܬܪܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..8." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܝܰܗ̱ܒ.html" class="sedra">ܝܰܗ̱ܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܣܟܺܢܳܐ.html" class="sedra">ܡܶܣܟܺܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܡܶܣܟܺܢܳܐ.html" class="sedra">ܠܡܶܣܟܺܢܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܡܰܘܗܒܰܬܳܐ.html" class="sedra">ܡܰܘܗܒܰܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܡܶܢ.html" class="sedra">ܕܡܶܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܽܠ.html" class="sedra">ܟܽܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..8." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܰܪܚܶܡܬܳܗ̇.html" class="sedra">ܕܰܪܚܶܡܬܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܨܪܺܝܟܽܘܬܶܗ.html" class="sedra">ܠܰܨܪܺܝܟܽܘܬܶܗ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܪܰܒܳܟ.html" class="sedra">ܕܪܰܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܬܺܝܪܳܐ.html" class="sedra">ܥܰܬܺܝܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܰܣܝܳܐ.html" class="sedra">ܟܰܣܝܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..8." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܡܥܺܝܢ.html" class="sedra">ܡܥܺܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܠܰܘ̈ܗ̱ܝ.html" class="sedra">ܡܶܠܰܘ̈ܗ̱ܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܶܓܣܶܐ.html" class="sedra">ܬܶܓܣܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢܳܟ.html" class="sedra">ܡܶܢܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܠܪܽܘܚܳܐ.html" class="sedra">ܠܪܽܘܚܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܬܶܗܘܶܐ.html" class="sedra">ܕܬܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܶܢܳܪܳܐ.html" class="sedra">ܟܶܢܳܪܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..8." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܬܶܙܡܼܰܪ.html" class="sedra">ܘܬܶܙܡܼܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܨܶܒܝܳܢܶܝ̈ܗ̇.html" class="sedra">ܨܶܒܝܳܢܶܝ̈ܗ̇</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܥܰܒܼܕܳܟ.html" class="sedra">ܕܥܰܒܼܕܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܓܺܝܙܰܒܪܶܗ.html" class="sedra">ܓܺܝܙܰܒܪܶܗ</a> </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..9" lang="syr">
+                                                    <span id="id..9"></span>
+                    <span class="tei-div  tei-section tei-head">9</span>
+                    <span class="tei-l   display" id="id..9." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܰܝܬ.html" class="sedra">ܠܰܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܚܰܣܳܡ.html" class="sedra">ܕܚܰܣܳܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܓܒܺܝܬܳܟ.html" class="sedra">ܒܰܓܒܺܝܬܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܡܰܟܺܝܟܳܐ.html" class="sedra">ܕܡܰܟܺܝܟܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܝ.html" class="sedra">ܗ̱ܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܺܝܫܳܢܽܘܬܳܟ.html" class="sedra">ܪܺܝܫܳܢܽܘܬܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..9." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܰܝܬ.html" class="sedra">ܠܰܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܪܓܶܙ.html" class="sedra">ܕܰܪܓܶܙ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܟܐܳܬܳܟ.html" class="sedra">ܒܰܟܐܳܬܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܫܰܝܢܳܐ.html" class="sedra">ܕܫܰܝܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܙܳܪܰܥ.html" class="sedra">ܙܳܪܰܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܶܬܓܳܡܳܟ.html" class="sedra">ܦܶܬܓܳܡܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..9." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܰܝܬ.html" class="sedra">ܠܰܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܩܳܢܶܛ.html" class="sedra">ܕܩܳܢܶܛ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܢ.html" class="sedra">ܡܶܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܳܠܳܟ.html" class="sedra">ܩܳܠܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܒܰܣܺܝܡܳܐ.html" class="sedra">ܕܒܰܣܺܝܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܝ.html" class="sedra">ܗ̱ܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܳܩܽܘܕܽܘܬܳܟ.html" class="sedra">ܦܳܩܽܘܕܽܘܬܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..9." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܰܝܬ.html" class="sedra">ܠܰܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܡܶܬܪܰܥܰܡ.html" class="sedra">ܕܡܶܬܪܰܥܰܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܠ.html" class="sedra">ܥܰܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܺܝܪܳܟ.html" class="sedra">ܢܺܝܪܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܗܽܘܝܽܘ.html" class="sedra">ܕܗܽܘܝܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܐܶܐ.html" class="sedra">ܠܳܐܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܠܳܦ.html" class="sedra">ܚܠܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܨܰܘܪܰܢ.html" class="sedra">ܨܰܘܪܰܢ</a> </span>
+                    <span class="tei-l   display" id="id..9." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܡܰܩܶܠ.html" class="sedra">ܘܡܰܩܶܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܽܘܩܪܳܐ.html" class="sedra">ܝܽܘܩܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܢܰܦܫ̈ܳܬܰܢ.html" class="sedra">ܕܢܰܦܫ̈ܳܬܰܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܓܒܳܟ.html" class="sedra">ܕܰܓܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܢܝܳܚܰܢ.html" class="sedra">ܠܰܢܝܳܚܰܢ</a> </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..10" lang="syr">
+                                                    <span id="id..10"></span>
+                    <span class="tei-div  tei-section tei-head">10</span>
+                    <span class="tei-l   display" id="id..10." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܳܐ.html" class="sedra">ܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܶܩܠܶܐ.html" class="sedra">ܬܶܩܠܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܽܘܩܒܰܠ.html" class="sedra">ܠܽܘܩܒܰܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܠܳܐ.html" class="sedra">ܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܰܘܚܶܠ.html" class="sedra">ܬܰܘܚܶܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܠ.html" class="sedra">ܥܰܠ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܰܠܳܫܳܐ.html" class="sedra">ܚܰܠܳܫܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..10." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܪܰܓܳܐ.html" class="sedra">ܪܰܓܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܐܠܶܦ.html" class="sedra">ܘܰܐܠܶܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܰܬܺܝܪ̈ܶܐ.html" class="sedra">ܥܰܬܺܝܪ̈ܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܓܰܪܶܓ.html" class="sedra">ܓܰܪܶܓ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܩܢܺܝ.html" class="sedra">ܘܰܩܢܺܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡ̈ܶܣܟܺܢܶܐ.html" class="sedra">ܡ̈ܶܣܟܺܢܶܐ</a> </span>
+                    <span class="tei-l   display" id="id..10." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܩܰܫܝܳܐ.html" class="sedra">ܠܩܰܫܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܙܘܶܓ.html" class="sedra">ܐܰܙܘܶܓ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܬܺܝܢܳܐ.html" class="sedra">ܡܰܬܺܝܢܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܢܰܓܺܝܪ.html" class="sedra">ܘܢܰܓܺܝܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܽܘܚܳܐ.html" class="sedra">ܪܽܘܚܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܚܶܡܬܳܢܳܐ.html" class="sedra">ܠܚܶܡܬܳܢܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..10." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܒܺܝܼ̈ܫܶܐ.html" class="sedra">ܠܒܺܝܼ̈ܫܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܛܳܒ̈ܶܐ.html" class="sedra">ܒܛܳܒ̈ܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܨܽܘܕ.html" class="sedra">ܨܽܘܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܢܽܘܢ.html" class="sedra">ܐܶܢܽܘܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܠܒܳܙܽܘ̈ܙܶܐ.html" class="sedra">ܘܰܠܒܳܙܽܘ̈ܙܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܝ̈ܳܗܽܘܒܶܐ.html" class="sedra">ܒܝ̈ܳܗܽܘܒܶܐ</a> </span>
+                    <span class="tei-l   display" id="id..10." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܰܠܛܰܡ̈ܐܶܐ.html" class="sedra">ܘܰܠܛܰܡ̈ܐܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܝܰܕ.html" class="sedra">ܒܝܰܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܰܕܺܝ̈ܫܶܐ.html" class="sedra">ܩܰܕܺܝ̈ܫܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܓܒܳܟ.html" class="sedra">ܕܰܓܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܨܰܝܳܕܰܢ.html" class="sedra">ܨܰܝܳܕܰܢ</a> </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..11" lang="syr">
+                                                    <span id="id..11"></span>
+                    <span class="tei-div  tei-section tei-head">11</span>
+                    <span class="tei-l   display" id="id..11." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܣܰܒ.html" class="sedra">ܣܰܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܟ.html" class="sedra">ܠܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪ̈ܶܒܽܘ.html" class="sedra">ܪ̈ܶܒܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܰܡ̈ܡܳܢܺܝܢ.html" class="sedra">ܣܰܡ̈ܡܳܢܺܝܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܩܽܘܡ.html" class="sedra">ܘܩܽܘܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܰܠܶܟ.html" class="sedra">ܗܰܠܶܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܝܢܳܬ.html" class="sedra">ܒܰܝܢܳܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܪ̈ܥܶܐ.html" class="sedra">ܡܰܪ̈ܥܶܐ</a> </span>
+                    <span class="tei-l   display" id="id..11." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܕܰܟܪܺܝܗ.html" class="sedra">ܠܕܰܟܪܺܝܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܰܡܳܐ.html" class="sedra">ܣܰܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܣܼܪܰܚ.html" class="sedra">ܐܰܣܼܪܰܚ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܶܗ.html" class="sedra">ܠܶܗ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܠܰܐܝܢܳܐ.html" class="sedra">ܘܠܰܐܝܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܚܠܺܝܡ.html" class="sedra">ܕܰܚܠܺܝܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܽܘܛܳܪܳܐ.html" class="sedra">ܢܽܘܛܳܪܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..11." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܰܘ.html" class="sedra">ܠܰܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܰܕ.html" class="sedra">ܚܰܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܰܡܳܐ.html" class="sedra">ܣܰܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܰܣܼܪܰܚ.html" class="sedra">ܬܰܣܼܪܰܚ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܶܗ.html" class="sedra">ܠܶܗ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܠܟܺܐܒܳܐ.html" class="sedra">ܠܟܺܐܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܠܡܳܐ.html" class="sedra">ܕܰܠܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܳܐ.html" class="sedra">ܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܳܗܶܢ.html" class="sedra">ܥܳܗܶܢ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..11." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܰܣܓܼܳܐ.html" class="sedra">ܐܰܣܓܼܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܰܪܶܒ.html" class="sedra">ܩܰܪܶܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܽܘܕܪ̈ܳܢܶܐ.html" class="sedra">ܥܽܘܕܪ̈ܳܢܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܟܺܐܒܳܐ.html" class="sedra">ܕܟܺܐܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܩܢܼܶܐ.html" class="sedra">ܢܶܩܢܼܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܽܘܠܡܳܢܳܐ.html" class="sedra">ܚܽܘܠܡܳܢܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..11." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܢ̱ܬ.html" class="sedra">ܐܰܢ̱ܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܺܐܠܰܦ.html" class="sedra">ܬܺܐܠܰܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܣܝܳܢܳܐ.html" class="sedra">ܢܶܣܝܳܢܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܠܐܺܝ.html" class="sedra">ܕܰܠܐܺܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܡܰܚ̈ܘܳܬܰܢ.html" class="sedra">ܒܡܰܚ̈ܘܳܬܰܢ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..12" lang="syr">
+                                                    <span id="id..12"></span>
+                    <span class="tei-div  tei-section tei-head">12</span>  
+                    <span class="tei-l   display" id="id..12." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܪܥܳܐ.html" class="sedra">ܐܰܪܥܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܨܶܒܝܳܢܳܟ.html" class="sedra">ܕܨܶܒܝܳܢܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܰܪܡܳܐ.html" class="sedra">ܟܰܪܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܦܽܘܠܚܳܢܳܟ.html" class="sedra">ܕܦܽܘܠܚܳܢܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..12." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܢܶܗܘܶܐ.html" class="sedra">ܢܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܓܙܳܪܳܐ.html" class="sedra">ܓܙܳܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܓܰܘ.html" class="sedra">ܒܓܰܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܝܪܳܟ.html" class="sedra">ܕܰܝܪܳܟ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܥܼܶܪ̈ܒܶܐ.html" class="sedra">ܘܥܼܶܪ̈ܒܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚ̈ܠܺܝܡܶܐ.html" class="sedra">ܚ̈ܠܺܝܡܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܚܶܝܬ.html" class="sedra">ܬܚܶܝܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܽܘܛܪܳܟ.html" class="sedra">ܚܽܘܛܪܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..12." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܬܶܗܘܶܐ.html" class="sedra">ܬܶܗܘܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܢ̱ܬ.html" class="sedra">ܐܰܢ̱ܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܺܝܫܳܐ.html" class="sedra">ܪܺܝܫܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܚܢܰܢ.html" class="sedra">ܘܰܚܢܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܛܰܒ̈ܥܶܐ.html" class="sedra">ܛܰܒ̈ܥܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܟܠܺܝܠܳܟ.html" class="sedra">ܕܰܟܠܺܝܠܳܟ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..12." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܢܶܫܼܦܰܪ.html" class="sedra">ܢܶܫܼܦܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܶܫܼܦܰܪ.html" class="sedra">ܬܶܫܼܦܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܢ.html" class="sedra">ܒܰܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܰܦܐܶܝܢ.html" class="sedra">ܕܰܦܐܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܢܽܘܢ.html" class="sedra">ܐܶܢܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܚܕ̈ܳܕܶܐ.html" class="sedra">ܠܰܚܕ̈ܳܕܶܐ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..12." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܥܰܡܳܐ.html" class="sedra">ܥܰܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܟܳܗܢܳܐ.html" class="sedra">ܘܟܳܗܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܳܐ.html" class="sedra">ܡܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܐܳܘܶܝܢ.html" class="sedra">ܕܐܳܘܶܝܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܙܪܰܥܼ.html" class="sedra">ܕܰܙܪܰܥܼ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܢ.html" class="sedra">ܒܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܘܝܽܘܬܳܐ.html" class="sedra">ܐܰܘܝܽܘܬܳܐ</a> </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..13" lang="syr">
+                                                    <span id="id..13"></span>
+                    <span class="tei-div  tei-section tei-head">13</span>
+                    <span class="tei-l   display" id="id..13." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܫܡܼܰܥ.html" class="sedra">ܫܡܼܰܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܫܠܺܝܚܳܐ.html" class="sedra">ܠܰܫܠܺܝܚܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܰܕ.html" class="sedra">ܟܰܕ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܡܰܪ.html" class="sedra">ܐܳܡܰܪ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܠܗܳܕܶܐ.html" class="sedra">ܠܗܳܕܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܬܽܘܠܬܳܐ.html" class="sedra">ܒܬܽܘܠܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܡܟܼܰܪ.html" class="sedra">ܕܰܡܟܼܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܳܐ.html" class="sedra">ܗ̱ܘܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..13." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܛܳܐܶ̇ܢ.html" class="sedra">ܛܳܐܶ̇ܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐ̱ܢܳܐ.html" class="sedra">ܐ̱ܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܟܽܘܢ.html" class="sedra">ܒܟܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܛܢܳܢܼܳܐ.html" class="sedra">ܒܰܛܢܳܢܼܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܰܛܢܳܢܳܐ.html" class="sedra">ܒܰܛܢܳܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܡ.html" class="sedra">ܠܰܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܠܳܗܳܐ.html" class="sedra">ܕܰܐܠܳܗܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..13." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܳܐ.html" class="sedra">ܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܒܶܣܪܳܐ.html" class="sedra">ܕܒܶܣܪܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܠܳܐ.html" class="sedra">ܐܶܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܪܽܘܚܳܐ.html" class="sedra">ܕܪܽܘܚܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܛܰܢ.html" class="sedra">ܛܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܗ̇.html" class="sedra">ܒܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܢ̱ܬ.html" class="sedra">ܐܰܢ̱ܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܟܝܳܐܺܝܬ.html" class="sedra">ܕܰܟܝܳܐܺܝܬ</a> </span>
+                    <span class="tei-l   display" id="id..13." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܬܶܕܰܥ.html" class="sedra">ܕܬܶܕܰܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܡܶܢܝ̱.html" class="sedra">ܕܡܶܢܝ̱</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܺܝ.html" class="sedra">ܗ̱ܺܝ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܰܕܡܰܢ.html" class="sedra">ܘܰܕܡܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܺܝ.html" class="sedra">ܗ̱ܺܝ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܼܶܪܚܰܡ.html" class="sedra">ܬܼܶܪܚܰܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܰܚܶܒ.html" class="sedra">ܬܰܚܶܒ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..13." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܠܝܶܫܽܘܥ.html" class="sedra">ܠܝܶܫܽܘܥ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܰܬܢܳܗ̇.html" class="sedra">ܚܰܬܢܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܫܪܳܪܳܐ.html" class="sedra">ܕܰܫܪܳܪܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܛܢܳܢܶܗ.html" class="sedra">ܕܰܛܢܳܢܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܰܕܺܝܫܰܐ.html" class="sedra">ܩܰܕܺܝܫܰܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘ.html" class="sedra">ܗ̱ܘ</a> </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..14" lang="syr">
+                                                    <span id="id..14"></span>
+                    <span class="tei-div  tei-section tei-head">14</span>
+                    <span class="tei-l   display" id="id..14." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܰܝܟ.html" class="sedra">ܐܰܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪ̈ܰܒܳܢܶܝܗ̇.html" class="sedra">ܪ̈ܰܒܳܢܶܝܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܽܘܒܳܪ̈ܶܝܗ̇.html" class="sedra">ܕܽܘܒܳܪ̈ܶܝܗ̇</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܥܰܡ.html" class="sedra">ܕܥܰܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܪܦܶܐ.html" class="sedra">ܕܰܪܦܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܦܝܳܐ.html" class="sedra">ܪܰܦܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܝ.html" class="sedra">ܗ̱ܝ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..14." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܘܥܰܡ.html" class="sedra">ܘܥܰܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܰܘ.html" class="sedra">ܗܰܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܙܗܶܐ.html" class="sedra">ܕܰܙܗܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܨܺܝܚܳܐ.html" class="sedra">ܢܰܨܺܝܚܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܝ.html" class="sedra">ܗ̱ܝ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܥܺܕ̱ܬܳܐ.html" class="sedra">ܥܺܕ̱ܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܳܡܝܳܐ.html" class="sedra">ܕܳܡܝܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܡܰܚܙܺܝܬܳܐ.html" class="sedra">ܠܡܰܚܙܺܝܬܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..14." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܝܟ.html" class="sedra">ܕܰܐܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܰܪܨܽܘܦܳܐ.html" class="sedra">ܦܰܪܨܽܘܦܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܚܳܐܰܪ.html" class="sedra">ܕܚܳܐܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܳܗ̇.html" class="sedra">ܒܳܗ̇</a>   <a href="https://sedra.bethmardutho.org/api/word/ܗܳܟܰܢ.html" class="sedra">ܗܳܟܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܒܺܝܫܳܐ.html" class="sedra">ܠܒܺܝܫܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܶܡܘ̈ܳܬܶܗ.html" class="sedra">ܕܶܡܘ̈ܳܬܶܗ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..14." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܝܟ.html" class="sedra">ܕܰܐܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܠܟܳܐ.html" class="sedra">ܡܰܠܟܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܫܪܺܝܬܶܗ.html" class="sedra">ܡܰܫܪܺܝܬܶܗ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܘܰܐܝܟ.html" class="sedra">ܘܰܐܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܳܗܢܳܐ.html" class="sedra">ܟܳܗܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܳܦ.html" class="sedra">ܐܳܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܰܪܥܺܝܬܶܗ.html" class="sedra">ܡܰܪܥܺܝܬܶܗ</a> </span>
+                    <span class="tei-l   display" id="id..14." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܐܰܟܘܳܬܗܽܘܢ.html" class="sedra">ܐܰܟܘܳܬܗܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܗܽܘܢ.html" class="sedra">ܒܗܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܬܼܛܰܒܥܳܐ.html" class="sedra">ܡܶܬܼܛܰܒܥܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܛܰܒܥܳܗ̇.html" class="sedra">ܕܛܰܒܥܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܰܕܡܽܘܬܶܗ.html" class="sedra">ܒܰܕܡܽܘܬܶܗ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..15" lang="syr">
+                                                    <span id="id..15"></span>
+                    <span class="tei-div  tei-section tei-head">15</span>
+                    <span class="tei-l   display" id="id..15." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܠܳܐ.html" class="sedra">ܕܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܺܝܰܬܺܩܺܐ.html" class="sedra">ܕܺܝܰܬܺܩܺܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܢܼܰܕܘ̱.html" class="sedra">ܥܢܼܰܕܘ̱</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܶܢܽܘܢ.html" class="sedra">ܗܶܢܽܘܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܬܠܳܬܳܐ.html" class="sedra">ܬܠܳܬܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܟܳܗ̈ܢܶܐ.html" class="sedra">ܟܳܗ̈ܢܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܨ̈ܺܝܚܶܐ.html" class="sedra">ܢܰܨ̈ܺܝܚܶܐ</a> </span>
+                    <span class="tei-l   display" id="id..15." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܰܒܕܺܝܰܬܺܩܺܐ.html" class="sedra">ܕܰܒܕܺܝܰܬܺܩܺܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗܳܓܶܝܢ.html" class="sedra">ܗܳܓܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܘܰܘ.html" class="sedra">ܗ̱ܘܰܘ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܗܳܠܶܝܢ.html" class="sedra">ܗܳܠܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܰܪܬܶܝܢ.html" class="sedra">ܬܰܪܬܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܠܳܗܳܐ.html" class="sedra">ܕܰܐܠܳܗܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..15." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܝܽܘܬܪܳܢܳܐ.html" class="sedra">ܝܽܘܬܪܳܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܰܒܳܐ.html" class="sedra">ܪܰܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܫܒܼܰܩܘ̱.html" class="sedra">ܫܒܼܰܩܘ̱</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܢ.html" class="sedra">ܠܰܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܗܰܘ.html" class="sedra">ܗܰܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܛܽܘܦܣܳܐ.html" class="sedra">ܛܽܘܦܣܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܡܶܣܟܺܢܽܘܬܳܐ.html" class="sedra">ܕܡܶܣܟܺܢܽܘܬܳܐ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..15." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܠܳܐ.html" class="sedra">ܕܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܼܢܰܘ.html" class="sedra">ܩܼܢܰܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܡܶܕܶܡ.html" class="sedra">ܡܶܕܶܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܛܽܘܒ̈ܳܢܶܐ.html" class="sedra">ܛܽܘܒ̈ܳܢܶܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܥܰܒܕܽܘܢ.html" class="sedra">ܥܰܒܕܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܢ.html" class="sedra">ܠܰܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܶܢܝܳܢܰܝ̈ܗܽܘܢ.html" class="sedra">ܩܶܢܝܳܢܰܝ̈ܗܽܘܢ</a> </span>
+                    <span class="tei-l   display" id="id..15." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܗܼܘܳܬ.html" class="sedra">ܗܼܘܳܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܺܕܰܬܗܽܘܢ.html" class="sedra">ܥܺܕܰܬܗܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܺܝܡܰܬܗܽܘܢ.html" class="sedra">ܣܺܝܡܰܬܗܽܘܢ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܩܢܼܶܐ.html" class="sedra">ܕܰܩܢܼܶܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܒܗܽܘܢ.html" class="sedra">ܒܗܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܩܶܢܝܳܢܰܘ̈ܗ̱ܝ.html" class="sedra">ܩܶܢܝܳܢܰܘ̈ܗ̱ܝ</a>
+                                                    </span>
+                    
+                </div>
+                <div class="tei-div  tei-section" id="Head-id..16" lang="syr">
+                                                    <span id="id..16"></span>
+                    <span class="tei-div  tei-section tei-head">16</span>
+                    <span class="tei-l   display" id="id..16." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܟܳܗܢܳܐ.html" class="sedra">ܟܳܗܢܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܝܰܥܩܽܘܒ.html" class="sedra">ܝܰܥܩܽܘܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܰܨܺܝܚܳܐ.html" class="sedra">ܢܰܨܺܝܚܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܥܰܡܶܗ.html" class="sedra">ܥܰܡܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܼܶܨܚܰܬ̇.html" class="sedra">ܢܼܶܨܚܰܬ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܰܟܘܳܬܶܗ.html" class="sedra">ܐܰܟܘܳܬܶܗ</a> </span>
+                    <span class="tei-l   display" id="id..16." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܕܫܰܘܬܶܦ.html" class="sedra">ܕܫܰܘܬܶܦ</a> <a href="https://sedra.bethmardutho.org/api/word/ܚܽܘܒܶܗ.html" class="sedra">ܚܽܘܒܶܗ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܛܢܼܳܢܶܗ.html" class="sedra">ܠܰܛܢܼܳܢܶܗ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܕܶܚܠܳܐ.html" class="sedra">ܕܶܚܠܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܘܚܽܘܒܳܐ.html" class="sedra">ܘܚܽܘܒܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܐܶܬܥܼܰܛܦܰܬ.html" class="sedra">ܐܶܬܥܼܰܛܦܰܬ</a> </span>
+                    <span class="tei-l   display" id="id..16." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܒܒܳܒܽܘ.html" class="sedra">ܒܒܳܒܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܪܳܚܶܡ.html" class="sedra">ܪܳܚܶܡ</a> <a href="https://sedra.bethmardutho.org/api/word/ܙܶܕܩ̈ܳܬܳܐ.html" class="sedra">ܙܶܕܩ̈ܳܬܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܟܶܣܦܳܐ.html" class="sedra">ܒܟܶܣܦܳܐ</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܳܪܩܰܬ.html" class="sedra">ܦܳܪܩܰܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܫܒܰܝ̈ܳܐ.html" class="sedra">ܠܰܫܒܰܝ̈ܳܐ</a> </span>
+                    <span class="tei-l   display" id="id..16." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܒܽܘܠܓܰܫ.html" class="sedra">ܒܽܘܠܓܰܫ</a> <a href="https://sedra.bethmardutho.org/api/word/ܣܦܰܪ.html" class="sedra">ܣܦܰܪ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܳܡܽܘܣܳܐ.html" class="sedra">ܢܳܡܽܘܣܳܐ</a>   <a href="https://sedra.bethmardutho.org/api/word/ܠܶܒܳܗ̇.html" class="sedra">ܠܶܒܳܗ̇</a> <a href="https://sedra.bethmardutho.org/api/word/ܦܶܬܚܼܰܬ.html" class="sedra">ܦܶܬܚܼܰܬ</a> <a href="https://sedra.bethmardutho.org/api/word/ܠܰܟܬܳܒ̈ܶܐ.html" class="sedra">ܠܰܟܬܳܒ̈ܶܐ</a>
+                                                    </span>
+                    <span class="tei-l   display" id="id..16." lang="syr">
+                                                        <a href="https://sedra.bethmardutho.org/api/word/ܒܳܟ.html" class="sedra">ܒܳܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܶܝܢ.html" class="sedra">ܕܶܝܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܢܶܣܓܽܘܢ.html" class="sedra">ܢܶܣܓܽܘܢ</a> <a href="https://sedra.bethmardutho.org/api/word/ܥܽܘܕܪ̈ܳܢܶܝܗ̇.html" class="sedra">ܥܽܘܕܪ̈ܳܢܶܝܗ̇</a>   <a href="https://sedra.bethmardutho.org/api/word/ܒܪܺܝܟ.html" class="sedra">ܒܪܺܝܟ</a> <a href="https://sedra.bethmardutho.org/api/word/ܗ̱ܽܘ.html" class="sedra">ܗ̱ܽܘ</a> <a href="https://sedra.bethmardutho.org/api/word/ܕܰܐܘܪܶܒ.html" class="sedra">ܕܰܐܘܪܶܒ</a> <a href="https://sedra.bethmardutho.org/api/word/ܬܰܓܳܪ̈ܶܝܗ̇.html" class="sedra">ܬܰܓܳܪ̈ܶܝܗ̇</a>
+                                                    </span>
+                </div> 
+            </div>
+        </div>
+                                    </div>
+                                </bdi>
+    </div>
+                        </div>
+                
+                <div class="col-sm-4 col-md-4 col-lg-3 right-menu">
+                    <div id="rightCol" class="noprint">
+                        <div id="sedraDisplay" class="sedra panel panel-default">
+                            <div class="panel-body">
+                                <span style="display:block;text-align:center;margin:.5em;">
+                                    <a href=" http://sedra.bethmardutho.org" title="SEDRA IV">SEDRA IV</a>
+                                </span>
+                                <img src="$nav-base/resources/images/sedra-logo.png" title="Sedra logo" width="100%">
+                                <h3>Syriac Lexeme</h3>
+                                <div id="sedraContent">
+                                    <div class="content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                                <div class="panel-heading"><a href="#" data-toggle="collapse" data-target="#aboutDigitalText">About This Digital Text </a></div>
+                                <div class="panel-body collapse in" id="aboutDigitalText">
+                                    <div>
+                                        <h5>Corpus Text ID:</h5><span>
+                                            <idno type="URI">https://syriaccorpus.org/276</idno></span></div>
+                                    <div>
+                                        <h5>NHSL Work ID(s):</h5><span><a href="http://syriaca.org/work/8755">http://syriaca.org/work/8755</a><br></span><span><a href="http://syriaca.org/work/8737">http://syriaca.org/work/8737</a><br></span></div>
+                                    <div>
+                                        <h5>Source: </h5><span class="tei-sourceDesc">
+                <span class="section indent">Edmund Beck (ed.),  "<span class="title-analytic">Des Heiligen Ephraem der Syrers Carmina Nisibena</span>." in <span class="title-monographic">Corpus Scriptorum Christianorum Orientalium</span> (<span class="pubPlace">Louvain</span>:  <span class="publisher">Secrétariat du CorpusSCO</span>,  <span class="date">1961</span>).</span>
+            </span><span class="footnote-links"><span class="footnote-icon"><a href="http://syriaca.org/bibl/####" title="Link to Syriaca.org Bibliographic Record" data-toggle="tooltip" data-placement="top" class="bibl-links"><img src="/resources/images/icons-syriaca-sm.png" alt="Link to Syriaca.org Bibliographic Record" height="18px"></a></span></span></div>
+                                    <div style="margin-top:1em;"><span class="h5-inline">Type of Text: 
+                </span><span>Digital Edition</span>
+                  <a href="/documentation/wiki.html?wiki-page=/Types-of-Text-in-the-Digital-Syriac-Corpus&amp;wiki-uri=https://github.com/srophe/syriac-corpus/wiki"><span class="glyphicon glyphicon-question-sign text-info moreInfo"></span></a></div>
+                                    <div style="margin-top:1em;"><span class="h5-inline">Status: 
+            </span><span>Edited</span>
+               <a href="/documentation/wiki.html?wiki-page=/Status-of-Texts-in-the-Digital-Syriac-Corpus&amp;wiki-uri=https://github.com/srophe/syriac-corpus/wiki"><span class="glyphicon glyphicon-question-sign text-info moreInfo"></span></a></div>
+                                    <div style="margin-top:1em;"><span class="h5-inline">Publication Date: </span>June 12, 2019</div>
+                                    <div>
+                                        <h5>Preparation of Electronic Edition:</h5>
+                TEI XML encoding by James E. Walters. <br>
+                Syriac text transcribed by Michael Oez.
+              </div>
+                                    <div>
+                                        <h5>Open Access and Copyright:</h5>
+                                        <div class="small">
+                                            <div id="showMoreAccess" class="collapse">
+                                                <p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0;display:inline;" src="/resources/images/cc.png" height="18px"></a></p>
+                                            </div> <a href="#" class="togglelink" data-toggle="collapse" data-target="#showMoreAccess" data-text-swap="Hide details">See details...</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                    <div class="panel panel-default">
+                                <div class="panel-heading">How to Cite this Electronic Edition</div>
+                                <div class="panel-body">
+                                    <div id="citation-note">
+                                        <h5>Note:</h5><span> Ephrem the Syrian</span>, “<span class="title-analytic">Nisibis 19</span>”   ,  <span class="title-series">Digital Syriac Corpus</span>,  last modified June 12, 2019, <a href="https://syriaccorpus.org/276">https://syriaccorpus.org/276</a>.<div class="collapse" id="showFullCitation">
+                                            <div id="citation-bibliography">
+                                                <h5>Bibliography:</h5>“<span class="title-analytic">Nisibis 19</span>.” In <span class="title-monographic">Corpus Scriptorum Christianorum Orientalium</span>, edited by . Syriaca.org, 2016-. Entry published . <a href="https://syriaccorpus.org/276">https://syriaccorpus.org/276</a>.</div>
+                                        </div>
+                                        <br>
+                                        <a href="#" class="btn-sm btn-info togglelink pull-right" data-toggle="collapse" data-target="#showFullCitation" data-text-swap="Hide Citation Styles" style="margin-top:1em;">Show Citation Styles <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                    <div data-template="app:srophe-related" class="noprint">
+                                <div class="panel panel-default" style="margin-top:1em;">
+                                    <div class="panel-heading"><a href="#" data-toggle="collapse" data-target="#showLinkedData">Linked Data  </a><span class="glyphicon glyphicon-question-sign text-info moreInfo" aria-hidden="true" data-toggle="tooltip" title="This sidebar provides links via Syriaca.org to &#xA;            additional resources beyond this record. &#xA;            We welcome your additions, please use the e-mail button on the right to contact Syriaca.org about submitting additional links."></span><button class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#submitLinkedData" style="margin-right:1em;"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button></div>
+                                    <div class="panel-body collapse in" id="showLinkedData">
+                                        <div class="other-resources">
+                                            <div class="collapse in" id="showOtherResources">
+                                                <form class="form-inline hidden" action="modules/sparql-requests.xql" method="post"><input type="hidden" name="format" id="format" value="json"><textarea id="query" class="span9" rows="15" cols="150" name="query" type="hidden">
+                                        prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                                        prefix lawd: <http://lawd.info/ontology/>
+                                        prefix skos: <http://www.w3.org/2004/02/skos/core#>
+                                        prefix dcterms: <http://purl.org/dc/terms/>  
+                                                                                	        
+                                        SELECT ?uri (SAMPLE(?l) AS ?label) (SAMPLE(?uriSubject) AS ?subjects) (SAMPLE(?uriCitations) AS ?citations)
+                                            {
+                                                ?uri rdfs:label ?l
+                                                FILTER (?uri IN (<http://syriaca.org/work/8755>,<http://syriaca.org/work/8737>,<http://syriaca.org/person/13>,<https://syriaccorpus.org/276>,<http://syriaca.org/bibl/####>)).
+                                                FILTER ( langMatches(lang(?l), 'en')).
+                                                OPTIONAL{
+                                                    {SELECT ?uri ( count(?s) as ?uriSubject ) { ?s dcterms:relation ?uri } GROUP BY ?uri }  }
+                                                    OPTIONAL{
+                                                        {SELECT ?uri ( count(?o) as ?uriCitations ) { ?uri lawd:hasCitation ?o 
+                                                                OPTIONAL{ ?uri skos:closeMatch ?o.}
+                                                        } GROUP BY ?uri }
+                                                    }           
+                                            }
+                                        GROUP BY ?uri  
+                                      </textarea></form>
+                                                <div id="listOtherResources"></div>
+                                            </div>
+                                            <script>
+                                $(document).ready(function() {
+                                    $('#showOtherResources').children('form').each(function () {
+                                        var url = $(this).attr('action');
+                                            $.post(url, $(this).serialize(), function(data) {
+                                                console.log(data);
+                                                var showOtherResources = $("#listOtherResources");
+                                                var dataArray = data.results.bindings;
+                                                if (!jQuery.isArray(dataArray)) dataArray = [dataArray];
+                                                $.each(dataArray, function (currentIndex, currentElem) {
+                                                            var relatedResources = 'Resources related to <a href="'+ currentElem.uri.value +'">'+ currentElem.label.value + '</a> '
+                                                            var relatedSubjects = (currentElem.subjects) ? '<div class="indent">' + currentElem.subjects.value + ' related subjects</div>' : ''
+                                                            var relatedCitations = (currentElem.citations) ? '<div class="indent">' + currentElem.citations.value + ' related citations</div>' : ''
+                                                                showOtherResources.append(
+                                                                   '<div>' + relatedResources + relatedCitations + relatedSubjects + '</div>'
+                                                                );
+                                                        });
+                                            }).fail( function(jqXHR, textStatus, errorThrown) {
+                                                console.log(textStatus);
+                                            }); 
+                                        });
+                                        $('#getMoreLinkedData').one("click", function(e){
+                                           $('#showMoreResources').children('form').each(function () {
+                                                var url = $(this).attr('action');
+                                                    $.post(url, $(this).serialize(), function(data) {
+                                                        var showOtherResources = $("#showMoreResources"); 
+                                                        var dataArray = data.results.bindings;
+                                                        if (!jQuery.isArray(dataArray)) dataArray = [dataArray];
+                                                        $.each(dataArray, function (currentIndex, currentElem) {
+                                                            var relatedResources = 'Resources related to <a href="'+ currentElem.uri.value +'">'+ currentElem.label.value + '</a> '
+                                                            var relatedSubjects = (currentElem.subjects) ? '<div class="indent">' + currentElem.subjects.value + ' related subjects</div>' : ''
+                                                            var relatedCitations = (currentElem.citations) ? '<div class="indent">' + currentElem.citations.value + ' related citations</div>' : ''
+                                                                showOtherResources.append(
+                                                                   '<div>' + relatedResources + relatedCitations + relatedSubjects + '</div>'
+                                                                );
+                                                        });
+                                                    }).fail( function(jqXHR, textStatus, errorThrown) {
+                                                        console.log(textStatus);
+                                                    }); 
+                                                }); 
+                                        });
+                                });
+                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                </div>
+            </div>
+            <div id="footnoteDisplay" class="footnote">
+                <div class="content"></div>  
+            </div>
+            <script type="text/javascript">
+                $('input.toggleDisplay').click(function() {
+                var display = $(this).data("element");
+                $('.'+ display).toggle();
+                var section = $('.'+ display).hasClass("tei-head");
+                /*
+                if(section){
+                $(' .' + display + '.tei-head').toggle();
+                }else{
+                $(' .' + display).toggleClass( 'display' );
+                }*/
+                //Change checkbox to active
+                $(this).toggleClass( "active" );
+                console.log(display);
+                });
+                
+                $('button.toggleHead').click(function() {
+                $('.head').toggleClass( "hidden" );
+                });
+                
+                $('a.sedra').click(function(e) {
+                //event.preventDefault();
+                e.stopPropagation();
+                e.preventDefault();
+                var href = $(this).attr('href');
+                $('#sedraDisplay').css('display','block');
+                $.get(href, function( data ) {
+                $( "#sedraContent div.content" ).html( data );
+                })    
+                .fail(function() {
+                $('#sedraContent div.content').empty();
+                $( "#sedraContent div.content" ).html( 'There are no results for this word. Please try using the <a href="http://sedra.bethmardutho.org/">Syriac Dictionary Lookup</a>' );
+                });
+                });
+                
+                $('html').click(function() {
+                $('#sedraDisplay').hide();
+                $('#footnoteDisplay').hide();
+                $('#sedraContent div.content').empty();
+                $('#footnoteDisplay div.content').empty();
+                })
+                
+                $('#rightCol').click(function(e){
+                e.stopPropagation();
+                });
+                
+                $('.footnote-ref a').click(function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                var link = $(this);
+                var href = $(this).attr('href');
+                var content = $(href).html()
+                $('#footnoteDisplay').css('display','block');
+                $('#footnoteDisplay').css({'top':e.pageY-50,'left':e.pageX+25, 'position':'absolute'});
+                $('#footnoteDisplay div.content').html( content );    
+                });
+                
+            </script>
+            
+            <!--<div data-template="app:citation"/>-->
+        </div>
+        <!-- Modal email form-->
+        <div data-template="app:contact-form">
+                    <div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedbackLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                                    <h2 class="modal-title" id="feedbackLabel">Corrections/Additions?</h2>
+                                </div>
+                                <form action="/modules/email.xql" method="post" id="email" role="form">
+                                    <div class="modal-body" id="modal-body"><!-- More information about submitting data from howtoadd.html -->
+                                        <p><strong>Notify the editors of a mistake:</strong><a class="btn btn-link togglelink" data-toggle="collapse" data-target="#viewdetails" data-text-swap="hide information">more information...</a></p>
+                                        <div class="collapse" id="viewdetails">
+                                            <p>Using the following form, please inform us which page URI the mistake is on, where on the page the mistake occurs,
+                       the content of the correction, and a citation for the correct information (except in the case of obvious corrections, such as misspelled words). 
+                       Please also include your email address, so that we can follow up with you regarding 
+                       anything which is unclear. We will publish your name, but not your contact information as the author of the  correction.</p>
+                                        </div><input class="input-url" type="hidden" name="formLoaded" value="06:05:22.521Z"><input class="input-url" name="url" tabindex="-1" autocomplete="false" value=""><input type="text" name="name" placeholder="Name" class="form-control" style="max-width:300px"><br><input type="text" name="email" placeholder="email" class="form-control" style="max-width:300px"><br><input type="text" name="subject" placeholder="subject" class="form-control" style="max-width:300px"><br><textarea name="comments" id="comments" rows="3" class="form-control" placeholder="Comments" style="max-width:500px"></textarea><input type="hidden" name="id" value="https://syriaccorpus.org/276"><input type="hidden" name="collection" value=""><input class="input url" id="url" placeholder="url" required style="display:none;"><!-- start reCaptcha API--></div>
+                                    <div class="modal-footer"><button class="btn btn-default" data-dismiss="modal">Close</button><input id="email-submit" type="submit" value="Send e-mail" class="btn"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <div data-template="app:contact-form-linked-data">
+                    <div class="modal fade" id="submitLinkedData" tabindex="-1" role="dialog" aria-labelledby="submitLinkedDataLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                                    <h2 class="modal-title" id="feedbackLabel">Submit Linked Data</h2>
+                                </div>
+                                <form action="/modules/email.xql" method="post" id="email" role="form">
+                                    <div class="modal-body" id="modal-body"><input class="input-url" type="hidden" name="formLoaded" value="06:05:22.523Z"><input class="input-url" name="url" tabindex="-1" autocomplete="false" value=""><input type="text" name="name" placeholder="Name" class="form-control" style="max-width:300px"><br><input type="text" name="email" placeholder="email" class="form-control" style="max-width:300px"><br><input type="text" name="subject" placeholder="subject" class="form-control" style="max-width:300px"><br><textarea name="comments" id="comments" rows="3" class="form-control" placeholder="Comments" style="max-width:500px"></textarea><input type="hidden" name="id" value="https://syriaccorpus.org/276"><input type="hidden" name="formID" value="linkedData"><!-- start reCaptcha API-->
+                                        <div class="g-recaptcha" data-sitekey=""></div>
+                                    </div>
+                                    <div class="modal-footer"><button class="btn btn-default" data-dismiss="modal">Close</button><input id="email-submit" type="submit" value="Send e-mail" class="btn"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <div class="modal fade" id="moreInfo" tabindex="-1" role="dialog" aria-labelledby="moreInfoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">x</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <h2 class="modal-title" id="moreInfoLabel"></h2>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div id="moreInfo-box"></div>
+                        <br style="clear:both;">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+        <!-- Footer -->
+        <!-- Footer with Syriaca.org branding -->
+    <footer>
+    <div class="container" style="width: 60%">
+        <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">
+            <img alt="Creative Commons License" style="border-width:0" src="$nav-base/resources/images/cc.png" height="18px">
+        </a>
+        Digital Syriac Corpus is a collaboration of University of Oxford, Brigham Young University, 
+        Vanderbilt University, and the Center of Digital Humanities Research (CoDHR) at Texas A&amp;M University. 
+        This HTML page is copyrighted by Vanderbilt University and released under a under a 
+        <a href="https://creativecommons.org/licenses/by/4.0/" rel="license" style="color:#C0C0C0;">Creative Commons Attribution 4.0 International Public License (CC-BY 4.0)</a>. 
+        The TEI XML editions are copyrighted by the encoders and released under 
+        CC-BY 4.0. All Syriac base texts are in the public domain.
+    </div>
+</footer>
+    </body>
+    <!-- Additional Javascript -->
+    <script type="text/javascript" src="$nav-base/resources/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="$nav-base/resources/js/require.min.js"></script>
+    <script type="text/javascript" src="$nav-base/resources/js/srophe.js"></script>
+    <script type="text/javascript" src="$nav-base/resources/js/lightslider.min.js"></script>
+    <script type="text/javascript" src="$nav-base/resources/js/lightslider-functions.js"></script>
+    <script data-template="app:google-analytics"></script>
